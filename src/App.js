@@ -16,7 +16,7 @@ function App() {
   }
 
   const getApproval = async () => {
-    await approval()
+    //await approval()
     //await ownerAssets()
     await getName()
 

@@ -726,26 +726,25 @@ export const order = {
 
 export const basicOrder = {
     considerationToken: '0x0000000000000000000000000000000000000000',
-    considerationIdentifier: 0,
+    considerationIdentifier: '0',
     considerationAmount: "975000000000000000",
 
     offerer: "0xdd305DCf8C019B2E89cCEcfeDD80093726F611EF",
     offerToken: '0x23774Ea0CA2469b569511C514dA5fEcDd64319fF',
-    offerIdentifier: 1,
-    offerAmount: 1,
+    offerIdentifier: '1',
+    offerAmount: '1',
 
-    basicOrderType: 0,
-    startTime: 1669362764,
-    endTime: 1669967564,
+    basicOrderType: '0',
+    startTime: '1669362764',
+    endTime: '1669967564',
     zone: "0x0000000000000000000000000000000000000000",
     zoneHash: '0x3000000000000000000000000000000000000000000000000000000000000000',
     salt: '23504329581344010134838326502337599742689425785717070105048109825617444322231',
 
     offererConduitKey: '0x0000007b02230091a7ed01230072f7006a004d60a8d4e71d599b8104250f0000',
     fulfillerConduitKey: '0x0000007b02230091a7ed01230072f7006a004d60a8d4e71d599b8104250f0000',
-    totalOriginalAdditionalRecipients: 1,
-    //additionalRecipients: { Amount: "25000000000000000", recipient: "0x0000a26b00c1F0DF003000390027140000fAa719" },
-    additionalRecipients: ["25000000000000000", "0x0000a26b00c1F0DF003000390027140000fAa719"],
+    totalOriginalAdditionalRecipients: '1',
+    additionalRecipients: [["25000000000000000", "0x0000a26b00c1F0DF003000390027140000fAa719"]],
     signature: "0xe3196e873ccfc5802b4373d2528dd11c152a84c563f2bb4153461f6d287fe4575dca249a93cf9fe24140af44ca1ff5c7a6f36d3dbd2fc02b09a000b8011e71f5"
 
 }
@@ -3331,3 +3330,76 @@ export const SeaportABI = [
     },
 ];
 
+export const order998 = {
+    "offerer": "0xdd305DCf8C019B2E89cCEcfeDD80093726F611EF",
+    "offer": [[
+        {
+            " itemType": "2",
+            "token": "0xf8A1B1a32970160c7ea8Db4d137D0034605221aB",
+            "identifierOrCriteria": "998",
+            "startAmount": "1",
+            "endAmount": "1"
+        }]
+    ],
+    "consideration": [[{
+        "itemType": 0,
+        "token": "0x0000000000000000000000000000000000000000",
+        "identifierOrCriteria": 0,
+        "startAmount": "9750000000000000",
+        "endAmount": " 9750000000000000",
+        " recipient": "0xdd305DCf8C019B2E89cCEcfeDD80093726F611EF"
+    },
+    {
+        "itemType": 0,
+        "token": "0x0000000000000000000000000000000000000000",
+        "identifierOrCriteria": 0,
+        "startAmount": "250000000000000",
+        "endAmount": "250000000000000",
+        "recipient": "0x0000a26b00c1F0DF003000390027140000fAa719",
+        "startTime": 1669577259,
+        "endTime": 1672169259
+    }]
+    ],
+    "orderType": "0",
+    "zone": "0x0000000000000000000000000000000000000000",
+    "zoneHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "salt": "24446860302761739304752683030156737591518664810215442929805027343370116139120",
+    "conduitKey": " 0x0000007b02230091a7ed01230072f7006a004d60a8d4e71d599b8104250f0000",
+    "counter": "0"
+}
+
+export const orderz = {
+    "offerer": "0xdd305DCf8C019B2E89cCEcfeDD80093726F611EF",
+    "offer": [[
+
+        "2",
+        "0xf8A1B1a32970160c7ea8Db4d137D0034605221aB",
+        "998",
+        "1",
+        "1"
+    ]
+    ],
+    "consideration": [[
+        "0",
+        "0x0000000000000000000000000000000000000000",
+        "0",
+        "9750000000000000",
+        " 9750000000000000",
+        "0xdd305DCf8C019B2E89cCEcfeDD80093726F611EF",
+        "0",
+        "0x0000000000000000000000000000000000000000",
+        "0",
+        "250000000000000",
+        "250000000000000",
+        "0x0000a26b00c1F0DF003000390027140000fAa719",
+        "1669577259",
+        "1672169259"
+    ]
+    ],
+    "orderType": "0",
+    "zone": "0x0000000000000000000000000000000000000000",
+    "zoneHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "salt": "24446860302761739304752683030156737591518664810215442929805027343370116139120",
+    "conduitKey": " 0x0000007b02230091a7ed01230072f7006a004d60a8d4e71d599b8104250f0000",
+    "counter": "0"
+}

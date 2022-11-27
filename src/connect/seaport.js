@@ -2,11 +2,12 @@
 import { Seaport } from "@opensea/seaport-js";
 import { ethers } from "ethers";
 //import { SeaportSDK } from 'seaport-js'
-
-
-import { MUSICCLUB_ABI, order, SeaportABI, basicOrder } from './abi'
+import { MUSICCLUB_ABI, order, SeaportABI, basicOrder, order998, orderz } from './abi'
 const gpc = require('generate-pincode')
 
+var Web3 = require('web3');
+var web3 = new Web3(Web3.givenProvider)
+//var Contract = require('web3-eth-contract');
 
 
 
@@ -19,6 +20,8 @@ const fulfiller = provider.getSigner();
 
 
 const seaportMain = new ethers.Contract(SEAPORT_ADDR, SeaportABI, provider)
+const seaportWeb3 = new web3.eth.Contract(SeaportABI, SEAPORT_ADDR)
+
 const seaport = new Seaport(provider);
 const { ethereum } = window
 
@@ -27,6 +30,11 @@ const { ethereum } = window
 export const getName = async () => {
     let name = await seaportMain.name()
     console.log(name)
+
+    //web3
+    const seaportWeb3 = new web3.eth.Contract(SeaportABI, SEAPORT_ADDR, { from: await fulfiller.getAddress() })
+    let web3Name = await seaportWeb3.methods.name().call()
+    console.log(web3Name)
     return name
 
 }
@@ -100,13 +108,13 @@ export const fulfillOrder = async () => {
 
     //connect if not connected
     await ethereum.request({ method: 'eth_requestAccounts' })
-
-    console.log(await fulfiller.getAddress())
+    const singerAddress = await fulfiller.getAddress()
+    console.log()
 
     try {
 
         const seaportMain = new ethers.Contract(SEAPORT_ADDR, SeaportABI, fulfiller)
-        let orderString = await JSON.stringify(order.parameters)
+        let orderString = JSON.stringify(orderz)
         let orderObject = await JSON.parse(`${orderString}`)
         console.log(orderObject)
 
@@ -115,19 +123,10 @@ export const fulfillOrder = async () => {
         //     accountAddress: fulfiller._address,
         // });
 
-        // await getTransactionMethods(
-        //     seaportMain,
-        //     "fulfillOrder",
-        //     [order.parameters, order.parameters.conduitKey, { value: ethers.utils.parseEther('0.2') }],
-        //     'domain'
-        // )
 
-        //console.log(actions)
-
-
-
-        //let fulfillOrder = await seaportMain.fulfillOrder(orderObject, orderObject.conduitKey, { value: ethers.utils.parseEther('0.2') })
-        let fulfillBasic = await seaportMain.populateTransaction.fulfillOrder(orderObject, orderObject.conduitKey, { value: ethers.utils.parseEther('0.2') })
+        let fulfillOrder = await seaportWeb3.methods.fulfillBasicOrder(basicOrder).send({ from: await fulfiller.getAddress(), value: ethers.utils.parseEther('0.02') })
+        //let fulfillOrder = await seaportMain.fulfillBasicOrder(basicOrder, { value: ethers.utils.parseEther('0.02') })
+        //let fulfillBasic = await seaportMain.populateTransaction.fulfillOrder(orderObject, orderObject.conduitKey, { value: ethers.utils.parseEther('0.2') })
         //const tx = await fulfillOrder.await()
         //console.log(fulfillBasic)
 
