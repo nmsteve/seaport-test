@@ -1,18 +1,12 @@
 
 import { Seaport } from "@opensea/seaport-js";
 import { ethers } from "ethers";
-//import { SeaportSDK } from 'seaport-js'
-import { MUSICCLUB_ABI, order, SeaportABI, basicOrder, order998, orderz } from './abi'
+import { MUSICCLUB_ABI, SeaportABI, basicOrder, local0rder, SEAPORT_ADDR, MUSICCLUB_ADDR, Opensea0rder } from './constants'
 const gpc = require('generate-pincode')
 
 var Web3 = require('web3');
 var web3 = new Web3(Web3.givenProvider)
-//var Contract = require('web3-eth-contract');
 
-
-
-const SEAPORT_ADDR = '0x00000000006c3852cbEf3e08E8dF289169EdE581'
-const MUSICCLUB_ADDR = '0x23774Ea0CA2469b569511C514dA5fEcDd64319fF'
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const offerer = provider.getSigner();
@@ -65,25 +59,26 @@ export const createOrder = async () => {
                 offer: [
                     {
                         itemType: "2",
-                        token: "0x23774Ea0CA2469b569511C514dA5fEcDd64319fF",
-                        identifier: "1",
+                        token: "0xf8A1B1a32970160c7ea8Db4d137D0034605221aB",
+                        identifier: "998",
                     },
                 ],
                 consideration: [
                     {
-                        amount: ethers.utils.parseEther("0.975").toString(),
+                        amount: ethers.utils.parseEther("0.00975").toString(),
                         recipient: ethereum.selectedAddress.toString(),
                     },
                     {
-                        amount: ethers.utils.parseEther("0.025").toString(),
+                        amount: ethers.utils.parseEther("0.00025").toString(),
                         recipient: '0x0000a26b00c1F0DF003000390027140000fAa719',
                     },
                 ],
-
+                zone: "0x0000000000000000000000000000000000000000",
+                zoneHash: "0x0000000000000000000000000000000000000000000000000000000000000000",
                 conduitKey: '0x0000007b02230091a7ed01230072f7006a004d60a8d4e71d599b8104250f0000',
-                salt: gpc(77),
-                startTime: (Date.now() / 1000).toFixed(),
-                endTime: (Date.now() / 1000 + 3600 * 24 * 7).toFixed()
+                salt: "0x360c6ebe00000000000000000000000000000000000000004075210e08d00870",//gpc(77),
+                startTime: "1669577259", //(Date.now() / 1000).toFixed(),
+                endTime: "1672169259"//(Date.now() / 1000 + 3600 * 24 * 7).toFixed()
             },
 
 
@@ -114,7 +109,7 @@ export const fulfillOrder = async () => {
     try {
 
         const seaportMain = new ethers.Contract(SEAPORT_ADDR, SeaportABI, fulfiller)
-        let orderString = JSON.stringify(orderz)
+        let orderString = JSON.stringify(Opensea0rder)
         let orderObject = await JSON.parse(`${orderString}`)
         console.log(orderObject)
 
@@ -124,11 +119,61 @@ export const fulfillOrder = async () => {
         // });
 
 
-        let fulfillOrder = await seaportWeb3.methods.fulfillBasicOrder(basicOrder).send({ from: await fulfiller.getAddress(), value: ethers.utils.parseEther('0.02') })
+        let fulfillOrder = await seaportWeb3.methods.fulfillBasicOrder(basicOrder).send({ from: await fulfiller.getAddress(), value: ethers.utils.parseEther('0.01') })
         //let fulfillOrder = await seaportMain.fulfillBasicOrder(basicOrder, { value: ethers.utils.parseEther('0.02') })
         //let fulfillBasic = await seaportMain.populateTransaction.fulfillOrder(orderObject, orderObject.conduitKey, { value: ethers.utils.parseEther('0.2') })
         //const tx = await fulfillOrder.await()
         //console.log(fulfillBasic)
+
+    } catch (error) {
+        console.error(error)
+
+    }
+
+}
+
+export const fulfillBasicOrder = async () => {
+
+    try {
+
+        //  create basic order
+        const basicOrder = {
+
+            considerationToken: Opensea0rder.parameters.consideration[0].token,
+            considerationIdentifier: Opensea0rder.parameters.consideration[0].identifierOrCriteria,
+            considerationAmount: Opensea0rder.parameters.consideration[0].endAmount,
+
+            offerer: Opensea0rder.parameters.offerer,
+            offerToken: Opensea0rder.parameters.offer[0].token,
+            offerIdentifier: Opensea0rder.parameters.offer[0].identifierOrCriteria,
+            offerAmount: '1',
+
+            basicOrderType: Opensea0rder.parameters.orderType,
+            startTime: Opensea0rder.parameters.startTime,
+            endTime: Opensea0rder.parameters.endTime,
+            zone: Opensea0rder.parameters.zone,
+            zoneHash: Opensea0rder.parameters.zoneHash,
+            salt: Opensea0rder.parameters.salt,
+
+            offererConduitKey: Opensea0rder.parameters.conduitKey,
+            fulfillerConduitKey: Opensea0rder.parameters.conduitKey,
+            totalOriginalAdditionalRecipients: 1,
+            additionalRecipients: [
+                [Opensea0rder.parameters.consideration[1].startAmount, Opensea0rder.parameters.consideration[1].recipient]
+            ],
+            signature: Opensea0rder.signature
+        }
+
+        console.log(basicOrder)
+        console.log(Opensea0rder.parameters.consideration[0].startAmount)
+
+
+        //connect if not connected
+        await ethereum.request({ method: 'eth_requestAccounts' })
+        const seaportMain = new ethers.Contract(SEAPORT_ADDR, SeaportABI, fulfiller)
+
+        //let fulfillOrder = await seaportWeb3.methods.fulfillBasicOrder(basicOrder).send({ from: await fulfiller.getAddress(), value: ethers.utils.parseEther('0.01') })
+        let fulfillOrder = await seaportMain.fulfillBasicOrder(basicOrder, { value: ethers.utils.parseEther('0.01') })
 
     } catch (error) {
         console.error(error)

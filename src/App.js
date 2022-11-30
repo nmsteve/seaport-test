@@ -1,6 +1,8 @@
 
 import { useState } from 'react';
-import { createOrder, approval, fulfillOrder, getName } from "./connect/seaport"
+import { createOrder, approval, fulfillOrder, getName, fulfillBasicOrder } from "./connect/seaport"
+
+import { signOrder } from './connect/sign'
 
 
 function App() {
@@ -23,8 +25,9 @@ function App() {
 
   const displaySign = async () => {
     setSign('')
-    let orderNsign = await createOrder()
-    setSign(orderNsign.signature)
+    //let orderNsign = await createOrder()
+    //setSign(orderNsign.signature)
+    signOrder()
 
   }
 
@@ -47,7 +50,7 @@ function App() {
 
       <div className='d-flex align-items-center mt-3'>
         <button className='btn bg-success  rounded-2 py-0 w-md  d-none d-md-inline'
-          onClick={fulfillOrder}>fulfill Order</button>
+          onClick={fulfillBasicOrder}>fulfill Order</button>
         <p className='ms-2'></p>
       </div>
 
